@@ -1,5 +1,4 @@
-
-import { Users, UserCheck, CalendarDays, Clock, ChevronRight } from "lucide-react";
+import { Users, UserCheck, CalendarDays, Clock, ChevronRight, Fingerprint } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import StatCard from "@/components/dashboard/StatCard";
 import AttendanceChart from "@/components/charts/AttendanceChart";
@@ -8,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
+import BiometricLogSection from "@/components/dashboard/BiometricLogSection";
 
 const employeesList = [
   { id: 1, name: "Juan Dela Cruz", position: "Field Supervisor", status: "Present" },
@@ -56,6 +56,25 @@ const Index = () => {
           <Card>
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Fingerprint className="h-5 w-5 mr-2 text-cfarbempco-green" />
+                  <CardTitle className="text-lg">Biometric Log</CardTitle>
+                </div>
+                <Link to="/attendance">
+                  <Button variant="link" className="text-cfarbempco-green font-medium">
+                    View All <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <BiometricLogSection />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">Weekly Attendance</CardTitle>
                 <Link to="/attendance">
                   <Button variant="link" className="text-cfarbempco-green font-medium">
@@ -68,7 +87,9 @@ const Index = () => {
               <AttendanceChart />
             </CardContent>
           </Card>
+        </div>
 
+        <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
@@ -84,86 +105,86 @@ const Index = () => {
               <TenureChart />
             </CardContent>
           </Card>
-        </div>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Today's Attendance Overview</CardTitle>
-              <Link to="/attendance">
-                <Button variant="link" className="text-cfarbempco-green font-medium">
-                  View All <ChevronRight className="h-4 w-4 ml-1" />
-                </Button>
-              </Link>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="rounded-md border">
-              <div className="relative w-full overflow-auto">
-                <table className="w-full caption-bottom text-sm">
-                  <thead className="[&_tr]:border-b bg-gray-50">
-                    <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Employee</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Position</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Time In</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Time Out</th>
-                    </tr>
-                  </thead>
-                  <tbody className="[&_tr:last-child]:border-0">
-                    {employeesList.map((employee) => (
-                      <tr
-                        key={employee.id}
-                        className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                      >
-                        <td className="p-4 align-middle">
-                          <div className="flex items-center gap-3">
-                            <Avatar className="h-9 w-9">
-                              <AvatarImage src="" />
-                              <AvatarFallback className="bg-cfarbempco-green-light text-white">
-                                {employee.name.split(' ').map(n => n[0]).join('')}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span>{employee.name}</span>
-                          </div>
-                        </td>
-                        <td className="p-4 align-middle">{employee.position}</td>
-                        <td className="p-4 align-middle">
-                          <div className="flex items-center gap-2">
-                            <div
-                              className={`h-2 w-2 rounded-full ${
-                                employee.status === "Present"
-                                  ? "bg-green-500"
-                                  : employee.status === "Late"
-                                  ? "bg-yellow-500"
-                                  : "bg-red-500"
-                              }`}
-                            />
-                            <span>{employee.status}</span>
-                          </div>
-                        </td>
-                        <td className="p-4 align-middle">
-                          {employee.status !== "Absent" ? (
-                            employee.status === "Late" ? "9:15 AM" : "8:45 AM"
-                          ) : (
-                            <span className="text-gray-400">--:--</span>
-                          )}
-                        </td>
-                        <td className="p-4 align-middle">
-                          {employee.status !== "Absent" ? (
-                            "5:00 PM"
-                          ) : (
-                            <span className="text-gray-400">--:--</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg">Today's Attendance Overview</CardTitle>
+                <Link to="/attendance">
+                  <Button variant="link" className="text-cfarbempco-green font-medium">
+                    View All <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </Link>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-md border">
+                <div className="relative w-full overflow-auto">
+                  <table className="w-full caption-bottom text-sm">
+                    <thead className="[&_tr]:border-b bg-gray-50">
+                      <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Employee</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Position</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Time In</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Time Out</th>
+                      </tr>
+                    </thead>
+                    <tbody className="[&_tr:last-child]:border-0">
+                      {employeesList.map((employee) => (
+                        <tr
+                          key={employee.id}
+                          className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                        >
+                          <td className="p-4 align-middle">
+                            <div className="flex items-center gap-3">
+                              <Avatar className="h-9 w-9">
+                                <AvatarImage src="" />
+                                <AvatarFallback className="bg-cfarbempco-green-light text-white">
+                                  {employee.name.split(' ').map(n => n[0]).join('')}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span>{employee.name}</span>
+                            </div>
+                          </td>
+                          <td className="p-4 align-middle">{employee.position}</td>
+                          <td className="p-4 align-middle">
+                            <div className="flex items-center gap-2">
+                              <div
+                                className={`h-2 w-2 rounded-full ${
+                                  employee.status === "Present"
+                                    ? "bg-green-500"
+                                    : employee.status === "Late"
+                                    ? "bg-yellow-500"
+                                    : "bg-red-500"
+                                }`}
+                              />
+                              <span>{employee.status}</span>
+                            </div>
+                          </td>
+                          <td className="p-4 align-middle">
+                            {employee.status !== "Absent" ? (
+                              employee.status === "Late" ? "9:15 AM" : "8:45 AM"
+                            ) : (
+                              <span className="text-gray-400">--:--</span>
+                            )}
+                          </td>
+                          <td className="p-4 align-middle">
+                            {employee.status !== "Absent" ? (
+                              "5:00 PM"
+                            ) : (
+                              <span className="text-gray-400">--:--</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </AppLayout>
   );

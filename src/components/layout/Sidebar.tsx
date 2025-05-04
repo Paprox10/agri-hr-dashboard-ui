@@ -1,7 +1,6 @@
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -9,20 +8,20 @@ import {
   Clock, 
   CalendarDays, 
   FileText, 
-  ChartBar, 
-  ClipboardList, 
   ChevronLeft, 
   ChevronRight, 
-  LogOut 
+  LogOut,
+  ChartBar, 
+  ClipboardList 
 } from "lucide-react";
 
 interface SidebarProps {
   className?: string;
+  collapsed?: boolean;
+  toggleSidebar?: () => void;
 }
 
-const Sidebar = ({ className }: SidebarProps) => {
-  const [collapsed, setCollapsed] = useState(false);
-
+const Sidebar = ({ className, collapsed = false, toggleSidebar }: SidebarProps) => {
   const menuItems = [
     { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/" },
     { name: "Employee Management", icon: <Users size={20} />, path: "/employees" },
@@ -58,7 +57,7 @@ const Sidebar = ({ className }: SidebarProps) => {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={toggleSidebar}
           className={cn(
             "text-white hover:bg-cfarbempco-green hover:text-white",
             collapsed && "mx-auto mt-2"

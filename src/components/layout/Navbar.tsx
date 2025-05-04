@@ -1,5 +1,5 @@
 
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Search, User, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,9 +13,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const Navbar = () => {
+interface NavbarProps {
+  toggleSidebar?: () => void;
+  isSidebarOpen?: boolean;
+}
+
+const Navbar = ({ toggleSidebar, isSidebarOpen }: NavbarProps) => {
   return (
     <header className="bg-white border-b h-16 flex items-center px-4 sticky top-0 z-10">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={toggleSidebar}
+        className="mr-2 hover:bg-gray-100"
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
+      
       <div className="flex-1 flex items-center gap-4">
         <div className="hidden md:flex relative max-w-md">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />

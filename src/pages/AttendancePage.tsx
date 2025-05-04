@@ -16,7 +16,11 @@ import {
   Filter, 
   Download, 
   CalendarIcon,
-  Clock 
+  Clock,
+  Users,
+  Warehouse,
+  Tractor,
+  Building 
 } from "lucide-react";
 import {
   Tabs,
@@ -32,6 +36,15 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface AttendanceRecord {
   id: number;
@@ -103,63 +116,58 @@ const officeData = generateAttendanceData("Office");
 const AttendanceTable = ({ data }: { data: AttendanceRecord[] }) => {
   return (
     <div className="rounded-md border">
-      <div className="relative w-full overflow-auto">
-        <table className="w-full caption-bottom text-sm">
-          <thead className="[&_tr]:border-b bg-gray-50">
-            <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Employee</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Date</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Time In</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Time Out</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
-            </tr>
-          </thead>
-          <tbody className="[&_tr:last-child]:border-0">
-            {data.map((record) => (
-              <tr
-                key={record.id}
-                className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-              >
-                <td className="p-4 align-middle">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-9 w-9">
-                      <AvatarImage src="" />
-                      <AvatarFallback className="bg-cfarbempco-green-light text-white">
-                        {record.name.split(' ').map(n => n[0]).join('')}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div>{record.name}</div>
-                      <div className="text-sm text-gray-500">{record.position}</div>
-                    </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Employee</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Time In</TableHead>
+            <TableHead>Time Out</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((record) => (
+            <TableRow key={record.id}>
+              <TableCell>
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage src="" />
+                    <AvatarFallback className="bg-cfarbempco-green-light text-white">
+                      {record.name.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <div>{record.name}</div>
+                    <div className="text-sm text-gray-500">{record.position}</div>
                   </div>
-                </td>
-                <td className="p-4 align-middle">{format(new Date(record.date), "MMM dd, yyyy")}</td>
-                <td className="p-4 align-middle">
-                  {record.timeIn || <span className="text-gray-400">--:--</span>}
-                </td>
-                <td className="p-4 align-middle">
-                  {record.timeOut || <span className="text-gray-400">--:--</span>}
-                </td>
-                <td className="p-4 align-middle">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`h-2 w-2 rounded-full ${
-                        record.status === "Present"
-                          ? "bg-green-500"
-                          : record.status === "Late"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
-                      }`}
-                    />
-                    <span>{record.status}</span>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                </div>
+              </TableCell>
+              <TableCell>{format(new Date(record.date), "MMM dd, yyyy")}</TableCell>
+              <TableCell>
+                {record.timeIn || <span className="text-gray-400">--:--</span>}
+              </TableCell>
+              <TableCell>
+                {record.timeOut || <span className="text-gray-400">--:--</span>}
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <div
+                    className={`h-2 w-2 rounded-full ${
+                      record.status === "Present"
+                        ? "bg-green-500"
+                        : record.status === "Late"
+                        ? "bg-yellow-500"
+                        : "bg-red-500"
+                    }`}
+                  />
+                  <span>{record.status}</span>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 };
@@ -207,53 +215,109 @@ const AttendancePage = () => {
           </div>
         </div>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <CardTitle className="flex items-center">
-                  <Clock className="mr-2 h-5 w-5 text-cfarbempco-green" />
-                  Attendance Records
-                </CardTitle>
-                <CardDescription>
-                  View and manage biometric attendance records by area
-                </CardDescription>
-              </div>
+        <Tabs defaultValue="packing-area" className="space-y-4">
+          <TabsList className="grid grid-cols-3">
+            <TabsTrigger value="packing-area" className="flex items-center gap-2">
+              <Warehouse className="h-4 w-4" />
+              Packing Area
+            </TabsTrigger>
+            <TabsTrigger value="field-area" className="flex items-center gap-2">
+              <Tractor className="h-4 w-4" />
+              Field Area
+            </TabsTrigger>
+            <TabsTrigger value="office" className="flex items-center gap-2">
+              <Building className="h-4 w-4" />
+              Office Staff
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="packing-area">
+            <Card>
+              <CardHeader className="pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <CardTitle className="flex items-center">
+                      <Warehouse className="mr-2 h-5 w-5 text-cfarbempco-green" />
+                      Packing Area Attendance
+                    </CardTitle>
+                    <CardDescription>
+                      Biometric attendance records for packing area employees
+                    </CardDescription>
+                  </div>
 
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                <Input
-                  placeholder="Search attendance records..."
-                  className="pl-8 bg-white border-gray-200 focus-visible:ring-cfarbempco-green w-full max-w-sm"
-                />
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="packing-area">
-              <TabsList className="grid grid-cols-3 mb-4">
-                <TabsTrigger value="packing-area">Packing Area</TabsTrigger>
-                <TabsTrigger value="field-area">Field Area</TabsTrigger>
-                <TabsTrigger value="office">Office Staff</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="packing-area">
-                <h3 className="font-semibold mb-4">Packing Area Attendance</h3>
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                    <Input
+                      placeholder="Search packing area records..."
+                      className="pl-8 bg-white border-gray-200 focus-visible:ring-cfarbempco-green w-full max-w-sm"
+                    />
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
                 <AttendanceTable data={packingAreaData} />
-              </TabsContent>
-              
-              <TabsContent value="field-area">
-                <h3 className="font-semibold mb-4">Field Area Attendance</h3>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="field-area">
+            <Card>
+              <CardHeader className="pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <CardTitle className="flex items-center">
+                      <Tractor className="mr-2 h-5 w-5 text-cfarbempco-green" />
+                      Field Area Attendance
+                    </CardTitle>
+                    <CardDescription>
+                      Biometric attendance records for field area employees
+                    </CardDescription>
+                  </div>
+
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                    <Input
+                      placeholder="Search field area records..."
+                      className="pl-8 bg-white border-gray-200 focus-visible:ring-cfarbempco-green w-full max-w-sm"
+                    />
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
                 <AttendanceTable data={fieldAreaData} />
-              </TabsContent>
-              
-              <TabsContent value="office">
-                <h3 className="font-semibold mb-4">Office Staff Attendance</h3>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="office">
+            <Card>
+              <CardHeader className="pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <CardTitle className="flex items-center">
+                      <Building className="mr-2 h-5 w-5 text-cfarbempco-green" />
+                      Office Staff Attendance
+                    </CardTitle>
+                    <CardDescription>
+                      Biometric attendance records for office staff employees
+                    </CardDescription>
+                  </div>
+
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                    <Input
+                      placeholder="Search office staff records..."
+                      className="pl-8 bg-white border-gray-200 focus-visible:ring-cfarbempco-green w-full max-w-sm"
+                    />
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
                 <AttendanceTable data={officeData} />
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </AppLayout>
   );
