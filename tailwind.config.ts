@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+                // CFARBEMPCO Custom Colors
+                cfarbempco: {
+                    'green-dark': '#2D5F2E',
+                    'green': '#3F704D',
+                    'green-light': '#5C8D6A',
+                    'green-lightest': '#E9F1EA',
+                    'yellow': '#FFC107',
+                    'yellow-light': '#FFD54F',
+                }
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
